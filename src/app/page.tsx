@@ -75,8 +75,8 @@ export default function Home() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="container mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Drizzle + Turso)</h1>
-          <p className="text-muted-foreground mt-1">Заменено с Supabase/Prisma на собственный API с Drizzle ORM и Turso (libsql).</p>
+          <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Supabase)</h1>
+          <p className="text-muted-foreground mt-1">API работает через Supabase (supabase-js) с серверным клиентом.</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -121,9 +121,9 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <ul className="text-sm list-disc pl-5 space-y-2 text-muted-foreground">
-                <li>Установите переменные окружения TURSO_CONNECTION_URL и TURSO_AUTH_TOKEN.</li>
-                <li>Запустите миграции Drizzle (если нужны): npx drizzle-kit push.</li>
-                <li>API: GET/POST /api/users — уже готово (Drizzle + Turso).</li>
+                <li>Установите переменные окружения: NEXT_PUBLIC_SUPABASE_URL и SUPABASE_SERVICE_ROLE_KEY.</li>
+                <li>Убедитесь, что в Supabase есть таблица users с полями: id, email, name, created_at.</li>
+                <li>API: GET/POST /api/users — использует Supabase.</li>
               </ul>
             </CardContent>
           </Card>
