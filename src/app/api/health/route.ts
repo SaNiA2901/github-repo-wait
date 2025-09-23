@@ -1,10 +1,11 @@
 import { NextResponse } from "next/server";
-import prisma from "@/lib/prisma";
+import { db } from "@/db";
+import { users } from "@/db/schema";
 
 export async function GET() {
   try {
-    // simple connectivity check
-    await prisma.$queryRaw`SELECT 1`;
+    // simple connectivity check using Drizzle/Turso
+    await db.select().from(users).limit(1);
     return NextResponse.json({ ok: true });
   } catch (error: any) {
     return NextResponse.json({ ok: false, error: error.message ?? "DB error" }, { status: 500 });

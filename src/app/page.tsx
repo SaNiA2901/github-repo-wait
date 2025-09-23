@@ -25,7 +25,8 @@ export default function Home() {
   async function load() {
     try {
       setLoading(true);
-      const res = await fetch("/api/users", { cache: "no-store" });
+      const token = typeof window !== "undefined" ? localStorage.getItem("bearer_token") : null;
+      const res = await fetch("/api/users", { cache: "no-store", headers: token ? { Authorization: `Bearer ${token}` } : undefined });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Failed to load users");
       setUsers(data.users ?? []);
@@ -49,9 +50,13 @@ export default function Home() {
 
     startTransition(async () => {
       try {
+        const token = typeof window !== "undefined" ? localStorage.getItem("bearer_token") : null;
         const res = await fetch("/api/users", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            ...(token ? { Authorization: `Bearer ${token}` } : {}),
+          },
           body: JSON.stringify({ email: email.trim(), name: name.trim() || undefined }),
         });
         const data = await res.json();
@@ -70,8 +75,8 @@ export default function Home() {
     <div className="min-h-dvh bg-background text-foreground">
       <div className="container mx-auto max-w-5xl px-4 py-10">
         <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Prisma + PostgreSQL)</h1>
-          <p className="text-muted-foreground mt-1">Заменено с Supabase на собственный API и Prisma ORM.</p>
+          <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Drizzle + Turso)</h1>
+          <p className="text-muted-foreground mt-1">Заменено с Supabase/Prisma на собственный API с Drizzle ORM и Turso (libsql).</p>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
@@ -116,9 +121,9 @@ export default function Home() {
             </CardHeader>
             <CardContent>
               <ul className="text-sm list-disc pl-5 space-y-2 text-muted-foreground">
-                <li>Установите переменную окружения DATABASE_URL для PostgreSQL.</li>
-                <li>Запустите: npx prisma migrate dev — для создания таблиц.</li>
-                <li>API: GET/POST /api/users — уже готово.</li>
+                <li>Установите переменные окружения TURSO_CONNECTION_URL и TURSO_AUTH_TOKEN.</li>
+                <li>Запустите миграции Drizzle (если нужны): npx drizzle-kit push.</li>
+                <li>API: GET/POST /api/users — уже готово (Drizzle + Turso).</li>
               </ul>
             </CardContent>
           </Card>
