@@ -22,14 +22,24 @@ export default function Home() {
   const [name, setName] = useState("");
   const [isPending, startTransition] = useTransition();
 
+  // Safely parse JSON and fall back to text to avoid "Unexpected token '<'" errors
+  async function readJsonSafe(res: Response) {
+    const ct = res.headers.get("content-type") || "";
+    if (ct.includes("application/json")) {
+      return await res.json();
+    }
+    const text = await res.text();
+    return { error: text?.slice(0, 500) || "Non-JSON response" };
+  }
+
   async function load() {
     try {
       setLoading(true);
       const token = typeof window !== "undefined" ? localStorage.getItem("bearer_token") : null;
       const res = await fetch("/api/users", { cache: "no-store", headers: token ? { Authorization: `Bearer ${token}` } : undefined });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to load users");
-      setUsers(data.users ?? []);
+      const data = await readJsonSafe(res);
+      if (!res.ok) throw new Error((data as any)?.error || "Failed to load users");
+      setUsers((data as any).users ?? []);
     } catch (e: any) {
       toast.error(e.message || "Failed to load users");
     } finally {
@@ -59,8 +69,8 @@ export default function Home() {
           },
           body: JSON.stringify({ email: email.trim(), name: name.trim() || undefined }),
         });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || "Не удалось создать пользователя");
+        const data = await readJsonSafe(res);
+        if (!res.ok) throw new Error((data as any)?.error || "Не удалось создать пользователя");
         toast.success("Пользователь создан");
         setEmail("");
         setName("");

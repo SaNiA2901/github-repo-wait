@@ -3,6 +3,13 @@ import { supabaseAdmin } from "@/lib/supabase";
 
 // GET /api/users -> list users (newest first)
 export async function GET() {
+  // Ensure we always return JSON even if env is missing
+  if (!supabaseAdmin) {
+    return NextResponse.json(
+      { error: "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY." },
+      { status: 500 }
+    );
+  }
   try {
     const { data, error } = await supabaseAdmin
       .from("users")
@@ -28,6 +35,13 @@ export async function GET() {
 
 // POST /api/users -> create user
 export async function POST(req: Request) {
+  // Ensure we always return JSON even if env is missing
+  if (!supabaseAdmin) {
+    return NextResponse.json(
+      { error: "Supabase is not configured. Set NEXT_PUBLIC_SUPABASE_URL and SUPABASE_SERVICE_ROLE_KEY." },
+      { status: 500 }
+    );
+  }
   try {
     const body = await req.json();
     const email = String(body?.email || "").trim();
