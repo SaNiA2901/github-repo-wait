@@ -1,3 +1,4 @@
+/* Updated: 2025-09-23T06:32:06.281Z */
 /* Updated: 2025-09-23T04:57:23.632Z */
 /* Updated: 2025-09-23T04:57:07.157Z */
 /* Updated: 2025-09-23T04:56:26.294Z */
@@ -122,9 +123,8 @@
   body {
     @apply bg-background text-foreground;
   }
-}
-
-/* Hide Next.js error overlay portal */
-nextjs-portal {
-  display: none !important;
+  /* Hide Next.js error overlay portal */
+  nextjs-portal {
+    display: none !important;
+  }
 }
