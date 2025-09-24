@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Skeleton } from "@/components/ui/skeleton";
 import { toast } from "sonner";
+import Link from "next/link";
 
 type User = {
   id: number;
@@ -84,9 +85,14 @@ export default function Home() {
   return (
     <div className="min-h-dvh bg-background text-foreground">
       <div className="container mx-auto max-w-5xl px-4 py-10">
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Supabase)</h1>
-          <p className="text-muted-foreground mt-1">API работает через Supabase (supabase-js) с серверным клиентом.</p>
+        <div className="mb-8 flex items-start justify-between gap-4">
+          <div>
+            <h1 className="text-3xl font-bold tracking-tight">Demo: Пользователи (Supabase)</h1>
+            <p className="text-muted-foreground mt-1">API работает через Supabase (supabase-js) с серверным клиентом.</p>
+          </div>
+          <Link href="/login" className="shrink-0">
+            <Button variant="outline">Войти</Button>
+          </Link>
         </div>
 
         <div className="grid gap-6 md:grid-cols-2">
